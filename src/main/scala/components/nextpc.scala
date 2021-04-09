@@ -28,15 +28,34 @@ class NextPC extends Module {
     val eqf     = Input(Bool())
     val ltf     = Input(Bool())
     val funct3  = Input(UInt(3.W))
-    val pc      = Input(UInt(32.W))
+    val pc_or_x = Input(UInt(32.W))
     val imm     = Input(UInt(32.W))
 
     val nextpc  = Output(UInt(32.W))
     val taken   = Output(Bool())
   })
 
-  io.nextpc := io.pc + 4.U
-  io.taken  := false.B
-
   // Your code goes here
+  when (io.branch) {
+    when (io.funct3 === "b000".U)      { io.taken := io.eqf } // beq
+    .elsewhen (io.funct3 === "b001".U) { io.taken := !io.eqf } // bne
+    .elsewhen (io.funct3 === "b100".U) { io.taken := io.ltf } // blt
+    .elsewhen (io.funct3 === "b101".U) { io.taken := !io.ltf } // bge
+    .elsewhen (io.funct3 === "b110".U) { io.taken := io.ltf } // bltu
+    .elsewhen (io.funct3 === "b111".U) { io.taken := !io.ltf } // bgeu
+    .otherwise                         { io.taken := false.B } // invalid
+
+    when (io.taken) {
+      io.nextpc := io.pc_or_x + io.imm
+    } .otherwise {
+      io.nextpc := io.pc_or_x + 4.U
+    }
+  } .elsewhen (io.jal || io.jalr) {
+    io.taken := true.B // All jumps are taken
+    io.nextpc := io.pc_or_x + io.imm
+  } .otherwise {
+    io.nextpc := io.pc_or_x + 4.U
+    io.taken  := false.B
+  }
+
 }
