@@ -80,6 +80,7 @@ class SingleCycleCPU(implicit val conf: CPUConfig) extends BaseCPU {
   nextpc.io.jalr   := control.io.jalr
   nextpc.io.eqf    := alu.io.eqf
   nextpc.io.ltf    := alu.io.ltf
+  nextpc.io.ltuf   := alu.io.ltuf
   nextpc.io.funct3 := instruction(14,12)
   nextpc.io.pc_or_x:= Mux(control.io.jalr, registers.io.readdata1, pc)
   nextpc.io.imm    := imm
