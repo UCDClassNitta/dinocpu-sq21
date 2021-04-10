@@ -331,14 +331,14 @@ class NextPCBrTester(c: NextPC) extends PeekPokeTester(c) {
   private val ctl = c
 
   val tests = List(
-    // branch,   jal,    jalr,   eqf,       ltf,    funct3,   pc_or_x,  imm,   nextpc, taken
-	  (  true.B, false.B, false.B, false.B, false.B, "b000".U,  20.U ,    16.U,  24.U,  false.B, "beq0"),
-    (  true.B, false.B, false.B, true.B,  false.B, "b000".U,  20.U ,    16.U,  36.U,  true.B,  "beq1"),
-    (  true.B, false.B, false.B, false.B, false.B, "b001".U,  20.U ,    16.U,  36.U,  true.B,  "bne"),
-    (  true.B, false.B, false.B, false.B, false.B, "b100".U,  20.U ,    16.U,  24.U,  false.B, "blt"),
-    (  true.B, false.B, false.B, false.B, false.B, "b101".U,  20.U ,    16.U,  36.U,  true.B,  "bge"),
-    (  true.B, false.B, false.B, false.B, false.B, "b110".U,  20.U ,    16.U,  24.U,  false.B, "bltu"),
-    (  true.B, false.B, false.B, false.B, false.B, "b111".U,  20.U ,    16.U,  36.U,  true.B,  "bgeu")
+    // branch,   jal,    jalr,   eqf,       ltf,   ltuf,  funct3,   pc_or_x,  imm,   nextpc, taken
+	  (  true.B, false.B, false.B, false.B, false.B, false.B, "b000".U,  20.U ,    16.U,  24.U,  false.B, "beq0"),
+    (  true.B, false.B, false.B, true.B,  false.B, false.B, "b000".U,  20.U ,    16.U,  36.U,  true.B,  "beq1"),
+    (  true.B, false.B, false.B, false.B, false.B, false.B, "b001".U,  20.U ,    16.U,  36.U,  true.B,  "bne"),
+    (  true.B, false.B, false.B, false.B, false.B, false.B, "b100".U,  20.U ,    16.U,  24.U,  false.B, "blt"),
+    (  true.B, false.B, false.B, false.B, false.B, false.B, "b101".U,  20.U ,    16.U,  36.U,  true.B,  "bge"),
+    (  true.B, false.B, false.B, false.B, false.B, false.B, "b110".U,  20.U ,    16.U,  24.U,  false.B, "bltu"),
+    (  true.B, false.B, false.B, false.B, false.B, false.B, "b111".U,  20.U ,    16.U,  36.U,  true.B,  "bgeu")
   )
 
   for (t <- tests) {
@@ -347,12 +347,13 @@ class NextPCBrTester(c: NextPC) extends PeekPokeTester(c) {
     poke(ctl.io.jalr,   t._3)
     poke(ctl.io.eqf,    t._4)
     poke(ctl.io.ltf,    t._5)
-    poke(ctl.io.funct3, t._6)
-    poke(ctl.io.pc_or_x,t._7)
-    poke(ctl.io.imm,    t._8)
+    poke(ctl.io.ltuf,   t._6)
+    poke(ctl.io.funct3, t._7)
+    poke(ctl.io.pc_or_x,t._8)
+    poke(ctl.io.imm,    t._9)
     step(1)
-    expect(ctl.io.nextpc, t._9,  s"${t._11} wrong")
-    expect(ctl.io.taken,  t._10, s"${t._11} wrong")
+    expect(ctl.io.nextpc, t._10,  s"${t._12} wrong")
+    expect(ctl.io.taken,  t._11, s"${t._12} wrong")
   }
 }
 
@@ -381,9 +382,9 @@ class NextPCJalTester(c: NextPC) extends PeekPokeTester(c) {
   private val ctl = c
 
   val tests = List(
-    // branch,   jal,    jalr,   eqf,      ltf,     funct3,   pc_or_x,  imm,   nextpc, taken
-	  (  false.B, true.B, false.B, false.B, false.B, "b000".U,  60.U ,    16.U,  76.U,  true.B, "jal0"),
-    (  false.B, true.B, false.B, true.B,  false.B, "b000".U,  40.U ,    8.U,   48.U,  true.B, "jal1")
+    // branch,   jal,    jalr,   eqf,      ltf,    ltuf,  funct3,   pc_or_x,  imm,   nextpc, taken
+	  (  false.B, true.B, false.B, false.B, false.B, false.B, "b000".U,  60.U ,    16.U,  76.U,  true.B, "jal0"),
+    (  false.B, true.B, false.B, true.B,  false.B, false.B, "b000".U,  40.U ,    8.U,   48.U,  true.B, "jal1")
   )
 
   for (t <- tests) {
@@ -392,12 +393,13 @@ class NextPCJalTester(c: NextPC) extends PeekPokeTester(c) {
     poke(ctl.io.jalr,   t._3)
     poke(ctl.io.eqf,    t._4)
     poke(ctl.io.ltf,    t._5)
-    poke(ctl.io.funct3, t._6)
-    poke(ctl.io.pc_or_x,t._7)
-    poke(ctl.io.imm,    t._8)
+    poke(ctl.io.ltuf,   t._6)
+    poke(ctl.io.funct3, t._7)
+    poke(ctl.io.pc_or_x,t._8)
+    poke(ctl.io.imm,    t._9)
     step(1)
-    expect(ctl.io.nextpc, t._9,  s"${t._11} wrong")
-    expect(ctl.io.taken,  t._10, s"${t._11} wrong")
+    expect(ctl.io.nextpc, t._10,  s"${t._12} wrong")
+    expect(ctl.io.taken,  t._11, s"${t._12} wrong")
   }
 }
 
@@ -427,9 +429,9 @@ class NextPCJalrTester(c: NextPC) extends PeekPokeTester(c) {
   private val ctl = c
 
   val tests = List(
-    // branch,   jal,    jalr,   eqf,     ltf,     funct3,  pc_or_x,  imm,   nextpc, taken
-	  (  false.B, false.B, true.B, false.B, false.B,  0.U,    44.U ,    16.U,  60.U,   true.B, "jalr0"),
-    (  false.B, false.B, true.B, false.B, false.B,  0.U,    112.U ,   12.U,  124.U,  true.B, "jalr1")
+    // branch,   jal,    jalr,   eqf,     ltf,     ltuf,    funct3,  pc_or_x,  imm,   nextpc, taken
+	  (  false.B, false.B, true.B, false.B, false.B, false.B,  0.U,    44.U ,    16.U,  60.U,   true.B, "jalr0"),
+    (  false.B, false.B, true.B, false.B, false.B, false.B,  0.U,    112.U ,   12.U,  124.U,  true.B, "jalr1")
   )
 
   for (t <- tests) {
@@ -438,12 +440,13 @@ class NextPCJalrTester(c: NextPC) extends PeekPokeTester(c) {
     poke(ctl.io.jalr,   t._3)
     poke(ctl.io.eqf,    t._4)
     poke(ctl.io.ltf,    t._5)
-    poke(ctl.io.funct3, t._6)
-    poke(ctl.io.pc_or_x,t._7)
-    poke(ctl.io.imm,    t._8)
+    poke(ctl.io.ltuf,   t._6)
+    poke(ctl.io.funct3, t._7)
+    poke(ctl.io.pc_or_x,t._8)
+    poke(ctl.io.imm,    t._9)
     step(1)
-    expect(ctl.io.nextpc, t._9,  s"${t._11} wrong")
-    expect(ctl.io.taken,  t._10, s"${t._11} wrong")
+    expect(ctl.io.nextpc, t._10,  s"${t._12} wrong")
+    expect(ctl.io.taken,  t._11, s"${t._12} wrong")
   }
 }
 
@@ -472,25 +475,25 @@ class NextPCTester(c: NextPC) extends PeekPokeTester(c) {
   private val ctl = c
 
   val tests = List(
-    // branch,   jal,    jalr,     eqf,      ltf,   funct3,    pc_or_x, imm,   nextpc,  taken
-    (  false.B, false.B, false.B, false.B, false.B, "b000".U,  200.U,   164.U, 204.U,  false.B, "none0"),
-	  (  true.B,  false.B, false.B, false.B, false.B, "b000".U,  20.U,    16.U,  24.U,   false.B, "beqF"),
-    (  true.B,  false.B, false.B, true.B,  false.B, "b000".U,  28.U,    40.U,  68.U,   true.B,  "beqT"),
-    (  true.B,  false.B, false.B, false.B, false.B, "b001".U,  36.U,    12.U,  48.U,   true.B,  "bneT"),
-    (  true.B,  false.B, false.B, true.B,  false.B, "b001".U,  52.U,    8.U,   56.U,   false.B, "bneF"),
-    (  true.B,  false.B, false.B, false.B, false.B, "b100".U,  24.U,    20.U,  28.U,   false.B, "bltF"),
-    (  true.B,  false.B, false.B, false.B, true.B,  "b100".U,  12.U,    8.U,   20.U,   true.B,  "bltT"),
-    (  true.B,  false.B, false.B, true.B,  false.B, "b101".U,  24.U,    16.U,  40.U,   true.B,  "bgeT"),
-    (  true.B,  false.B, false.B, false.B, true.B,  "b101".U,  28.U,    16.U,  32.U,   false.B, "bgeF"),
-    (  true.B,  false.B, false.B, false.B, false.B, "b110".U,  20.U,    16.U,  24.U,   false.B, "bltuF"),
-    (  true.B,  false.B, false.B, false.B, true.B,  "b110".U,  4.U,     24.U,  28.U,   true.B,  "bltuT"),
-    (  false.B, false.B, false.B, false.B, false.B, "b000".U,  164.U,   12.U,  168.U,  false.B, "none1"),
-    (  true.B,  false.B, false.B, false.B, false.B, "b111".U,  20.U,    16.U,  36.U,   true.B,  "bgeuT"),
-    (  true.B,  false.B, false.B, false.B, true.B,  "b111".U,  68.U,    16.U,  72.U,   false.B, "bgeuF"),
-    (  false.B, true.B,  false.B, false.B, false.B, "b000".U,  204.U,   16.U,  220.U,  true.B,  "jal0"),
-    (  false.B, true.B,  false.B, true.B,  false.B, "b000".U,  208.U,   8.U,   216.U,  true.B,  "jal1"),
-    (  false.B, false.B, true.B,  false.B, true.B,  "b000".U,  100.U,   16.U,  116.U,  true.B,  "jalr0"),
-    (  false.B, false.B, true.B,  false.B, true.B,  "b000".U,  116.U, 12.U,  128.U,  true.B,  "jalr1")
+    // branch,   jal,    jalr,     eqf,      ltf,   ltuf,    funct3,    pc_or_x, imm,   nextpc,  taken
+    (  false.B, false.B, false.B, false.B, false.B, false.B, "b000".U,  200.U,   164.U, 204.U,  false.B, "none0"),
+	  (  true.B,  false.B, false.B, false.B, false.B, false.B, "b000".U,  20.U,    16.U,  24.U,   false.B, "beqF"),
+    (  true.B,  false.B, false.B, true.B,  false.B, false.B, "b000".U,  28.U,    40.U,  68.U,   true.B,  "beqT"),
+    (  true.B,  false.B, false.B, false.B, false.B, false.B, "b001".U,  36.U,    12.U,  48.U,   true.B,  "bneT"),
+    (  true.B,  false.B, false.B, true.B,  false.B, false.B, "b001".U,  52.U,    8.U,   56.U,   false.B, "bneF"),
+    (  true.B,  false.B, false.B, false.B, false.B, false.B, "b100".U,  24.U,    20.U,  28.U,   false.B, "bltF"),
+    (  true.B,  false.B, false.B, false.B, true.B,  true.B,  "b100".U,  12.U,    8.U,   20.U,   true.B,  "bltT"),
+    (  true.B,  false.B, false.B, true.B,  false.B, false.B, "b101".U,  24.U,    16.U,  40.U,   true.B,  "bgeT"),
+    (  true.B,  false.B, false.B, false.B, true.B,  false.B, "b101".U,  28.U,    16.U,  32.U,   false.B, "bgeF"),
+    (  true.B,  false.B, false.B, false.B, false.B, false.B, "b110".U,  20.U,    16.U,  24.U,   false.B, "bltuF"),
+    (  true.B,  false.B, false.B, false.B, true.B,  true.B,  "b110".U,  4.U,     24.U,  28.U,   true.B,  "bltuT"),
+    (  false.B, false.B, false.B, false.B, false.B, false.B, "b000".U,  164.U,   12.U,  168.U,  false.B, "none1"),
+    (  true.B,  false.B, false.B, false.B, false.B, false.B, "b111".U,  20.U,    16.U,  36.U,   true.B,  "bgeuT"),
+    (  true.B,  false.B, false.B, false.B, false.B, true.B,  "b111".U,  68.U,    16.U,  72.U,   false.B, "bgeuF"),
+    (  false.B, true.B,  false.B, false.B, false.B, false.B, "b000".U,  204.U,   16.U,  220.U,  true.B,  "jal0"),
+    (  false.B, true.B,  false.B, true.B,  false.B, false.B, "b000".U,  208.U,   8.U,   216.U,  true.B,  "jal1"),
+    (  false.B, false.B, true.B,  false.B, true.B,  false.B, "b000".U,  100.U,   16.U,  116.U,  true.B,  "jalr0"),
+    (  false.B, false.B, true.B,  false.B, true.B,  false.B, "b000".U,  116.U,   12.U,  128.U,  true.B,  "jalr1")
   )
 
   for (t <- tests) {
@@ -499,12 +502,13 @@ class NextPCTester(c: NextPC) extends PeekPokeTester(c) {
     poke(ctl.io.jalr,   t._3)
     poke(ctl.io.eqf,    t._4)
     poke(ctl.io.ltf,    t._5)
-    poke(ctl.io.funct3, t._6)
-    poke(ctl.io.pc_or_x,t._7)
-    poke(ctl.io.imm,    t._8)
+    poke(ctl.io.ltuf,   t._6)
+    poke(ctl.io.funct3, t._7)
+    poke(ctl.io.pc_or_x,t._8)
+    poke(ctl.io.imm,    t._9)
     step(1)
-    expect(ctl.io.nextpc, t._9,  s"${t._11} wrong")
-    expect(ctl.io.taken,  t._10, s"${t._11} wrong")
+    expect(ctl.io.nextpc, t._10,  s"${t._12} wrong")
+    expect(ctl.io.taken,  t._11, s"${t._12} wrong")
   }
 }
 
