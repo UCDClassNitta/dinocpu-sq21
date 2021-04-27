@@ -37,8 +37,27 @@ class NextPC extends Module {
     val taken   = Output(Bool())
   })
 
-  io.nextpc := io.pc_or_x + 4.U
-  io.taken  := false.B
-
   // Your code goes here
+  when (io.branch) {
+    when (io.funct3 === "b000".U)      { io.taken := io.eqf } // beq
+    .elsewhen (io.funct3 === "b001".U) { io.taken := !io.eqf } // bne
+    .elsewhen (io.funct3 === "b100".U) { io.taken := io.ltf } // blt
+    .elsewhen (io.funct3 === "b101".U) { io.taken := !io.ltf } // bge
+    .elsewhen (io.funct3 === "b110".U) { io.taken := io.ltuf } // bltu
+    .elsewhen (io.funct3 === "b111".U) { io.taken := !io.ltuf } // bgeu
+    .otherwise                         { io.taken := false.B } // invalid
+
+    when (io.taken) {
+      io.nextpc := io.pc_or_x + io.imm
+    } .otherwise {
+      io.nextpc := io.pc_or_x + 4.U
+    }
+  } .elsewhen (io.jal || io.jalr) {
+    io.taken := true.B // All jumps are taken
+    io.nextpc := io.pc_or_x + io.imm
+  } .otherwise {
+    io.nextpc := io.pc_or_x + 4.U
+    io.taken  := false.B
+  }
+
 }
