@@ -421,7 +421,7 @@ Failure to adhere to the instructions will result in a loss of points.
 
 ## Code portion
 
-You will upload the files that you changed (`src/main/scala/components/hazard-bp.scala` and `src/main/scala/pipelined/cpu-bp.scala`) to Gradescope on the `Assignment 4: Code` assignment.
+You will upload the files that you changed (`src/main/scala/components/hazard-bp.scala` and `src/main/scala/pipelined/cpu-bp.scala`) to Gradescope on the `Project 4: Code` assignment [here](https://www.gradescope.com/courses/258436/assignments/1242262).
 
 Once uploaded, Gradescope will automatically download and run your code.
 This should take less than 5 minutes.
@@ -432,7 +432,7 @@ Note: There is no partial credit on Part I and it is all or nothing.
 
 ## Written portion
 
-You will upload your answers for the `Assignment 4: Written` assignment to Gradescope.
+You will upload your answers for the `Project 4: Written` assignment to Gradescope [here](https://www.gradescope.com/courses/258436/assignments/1242265).
 **Please upload a separate page for each answer!**
 Additionally, I believe Gradescope allows you to circle the area with your final answer.
 Make sure to do this!
